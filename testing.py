@@ -16,7 +16,7 @@ def test_logger():
 def divide_number(a,b):
     try:
         result = a / b
-        logger.info(f"Division result: {result}")
+        logger.info(f"Division result: {result}")gclou
     except ZeroDivisionError as e:
         logger.error(f"Division by zero error: {e}")
         raise CustomException("Custom zero division error", sys) 
