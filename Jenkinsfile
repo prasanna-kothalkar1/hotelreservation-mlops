@@ -49,5 +49,27 @@ pipeline{
             }
             
         }
+        stage('Deploying docker image to Google Cloud Run'){
+            steps{
+                script{
+                    withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                       script{
+                        echo 'Deploying docker image to Google Cloud Run.............'
+                        sh '''
+                        export PATH=$PATH:$GCLOUD_PATH
+                        gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+                        gcloud config set project $GCP_PROJECT
+                        gcloud run deploy hotelreservation-mlops \
+                            --image=gcr.io/$GCP_PROJECT/hotelreservation-mlops:latest \
+                            --platform=managed \
+                            --region=us-central1 \
+                            --allow-unauthenticated \
+                        '''
+                        echo 'Docker image deployed to Google Cloud Run successfully'                   
+                       }
+                    }
+                }
+            }            
+        }
     }
 }
